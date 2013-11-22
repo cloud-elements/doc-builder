@@ -1,0 +1,21 @@
+/*
+ */
+apply plugin: 'groovy'
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'idea'
+
+repositories {
+    // Use 'maven central' for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.1.5'
+    testCompile "org.spockframework:spock-core:0.6-groovy-1.8"
+}
+
+war {
+    from 'src/main/groovy/com/jjw/docbuilder/groovlet' // add any groovlets to the root directory
+}
