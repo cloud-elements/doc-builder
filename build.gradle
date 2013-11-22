@@ -1,13 +1,10 @@
-/*
- */
 apply plugin: 'groovy'
 apply plugin: 'war'
 apply plugin: 'jetty'
 apply plugin: 'idea'
 
 repositories {
-    // Use 'maven central' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
+    // Use 'maven central' for resolving the dependencies
     mavenCentral()
 }
 
