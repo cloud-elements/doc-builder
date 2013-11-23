@@ -1,3 +1,5 @@
+import spock.lang.Specification
+
 /**
  * TODO
  *
@@ -5,6 +7,6 @@
  * @author: jjwyse
  * @since: 11/21/13
  */
-class TempTest
+class TempTest extends Specification
 {
 }
