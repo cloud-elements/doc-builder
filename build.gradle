@@ -23,4 +23,5 @@ war
 jettyRunWar
 {
     httpPort = 9111
+    reload = 'manual'
 }
