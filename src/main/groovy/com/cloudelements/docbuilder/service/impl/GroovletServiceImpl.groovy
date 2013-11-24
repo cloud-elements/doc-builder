@@ -1,6 +1,6 @@
-package com.jjw.docbuilder.service.impl
+package com.cloudelements.docbuilder.service.impl
 
-import com.jjw.docbuilder.service.GroovletService
+import com.cloudelements.docbuilder.service.GroovletService
 
 /**
  * TODO
