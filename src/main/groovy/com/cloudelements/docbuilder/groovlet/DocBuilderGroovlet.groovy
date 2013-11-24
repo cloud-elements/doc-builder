@@ -19,6 +19,14 @@ if (!session)
 }
 session.counter++
 
+// TODO - parse JSON request
+
+// TODO - forward on to actual tomcat endpoint (should be property driven but default to localhost:8080)
+
+// TODO - parse JSON response
+
+// TODO - generate .json file that swagger needs for documentation
+
 json.response
 {
     success(true)
