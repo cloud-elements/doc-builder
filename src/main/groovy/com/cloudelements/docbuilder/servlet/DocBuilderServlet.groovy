@@ -11,9 +11,16 @@ import javax.servlet.http.HttpServletRequest;
  */
 class DocBuilderServlet extends GroovyServlet
 {
+    private static final String DOC_BUILDER_GROOVLET = "/DocBuilder.groovy"
+
+    /**
+     * {@inheritDoc
+     *
+     * @return Always returns '/DocBuilder.groovy'
+     */
     @Override
     protected String getScriptUri(HttpServletRequest request)
     {
-        return "/DocBuilder.groovy"
+        return DOC_BUILDER_GROOVLET
     }
 }
