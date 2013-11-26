@@ -25,14 +25,6 @@ def getJson()
     return slurper
 }
 
-// Initiate a session if it doesn't exist
-if (!session)
-{
-    session = request.getSession(true)
-    session.counter = 0
-}
-session.counter++
-
 // HTTP method (GET, POST, etc.)
 def uri = request.getUri()
 def method = request.method
@@ -48,7 +40,7 @@ else if (method == "GET" || method == "DELETE")
 }
 else
 {
-    
+
     json.response
             {
                 success(false)
