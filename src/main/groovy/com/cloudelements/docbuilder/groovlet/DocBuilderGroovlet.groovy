@@ -18,7 +18,7 @@ import groovy.json.JsonSlurper
  *
  * @return The JSON slurper
  */
-def getJson()
+def getHttpBody()
 {
     new JsonSlurper().parse(request.reader)
 }
@@ -28,7 +28,7 @@ def getJson()
  *
  * @return The URL parameters in the HTTP request
  */
-def getParameters()
+def getHttpParameters()
 {
     request.parameters
 }
@@ -40,11 +40,12 @@ def method = request.method
 def jsonSlurper, queryParameters
 if (method == "POST" || method == "PUT")
 {
-    jsonSlurper = getJson()
+    jsonSlurper = getHttpBody()
+    queryParameters = getHttpParameters()
 }
 else if (method == "GET" || method == "DELETE")
 {
-    queryParameters = getParameters()
+    queryParameters = getHttpParameters()
 }
 else
 {
