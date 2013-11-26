@@ -11,4 +11,21 @@ import com.cloudelements.docbuilder.service.DocBuilderService
  */
 class DocBuilderServiceImpl implements DocBuilderService
 {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    def saveHttpRequest(url, parameters, body)
+    {
+        throw new RuntimeException("Method not implemented") // TODO - (jjwyse, 11/26/13)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    def saveHttpResponse(url, parameters, body)
+    {
+        throw new RuntimeException("Method not implemented") // TODO - (jjwyse, 11/26/13)
+    }
 }

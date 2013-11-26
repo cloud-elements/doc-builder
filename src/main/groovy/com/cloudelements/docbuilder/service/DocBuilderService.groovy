@@ -9,4 +9,21 @@ package com.cloudelements.docbuilder.service
  */
 interface DocBuilderService
 {
+    /**
+     *TODO
+     * @param url
+     * @param parameters
+     * @param body
+     * @return
+     */
+    def saveHttpRequest(url, parameters, body)
+
+    /**
+     * TODO
+     * @param url
+     * @param parameters
+     * @param body
+     * @return
+     */
+    def saveHttpResponse(url, parameters, body)
 }
