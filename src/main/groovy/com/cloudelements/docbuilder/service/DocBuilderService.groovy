@@ -7,6 +7,6 @@ package com.cloudelements.docbuilder.service
  * @author: jjwyse
  * @since: 11/21/13
  */
-interface GroovletService
+interface DocBuilderService
 {
 }

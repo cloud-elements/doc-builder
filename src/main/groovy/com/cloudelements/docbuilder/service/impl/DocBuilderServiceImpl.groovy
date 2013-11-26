@@ -1,6 +1,6 @@
 package com.cloudelements.docbuilder.service.impl
 
-import com.cloudelements.docbuilder.service.GroovletService
+import com.cloudelements.docbuilder.service.DocBuilderService
 
 /**
  * TODO
@@ -9,6 +9,6 @@ import com.cloudelements.docbuilder.service.GroovletService
  * @author: jjwyse
  * @since: 11/21/13
  */
-class GroovletServiceImpl implements GroovletService
+class DocBuilderServiceImpl implements DocBuilderService
 {
 }
