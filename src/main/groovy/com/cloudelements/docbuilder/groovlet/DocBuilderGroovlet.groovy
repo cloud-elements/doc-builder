@@ -20,9 +20,7 @@ import groovy.json.JsonSlurper
  */
 def getJson()
 {
-    def slurper = new JsonSlurper().parse(request.reader)
-
-    return slurper
+    new JsonSlurper().parse(request.reader)
 }
 
 /**
@@ -32,7 +30,7 @@ def getJson()
  */
 def getParameters()
 {
-
+    request.parameters
 }
 
 // HTTP method (GET, POST, etc.)
@@ -66,6 +64,7 @@ else
 
 // TODO - generate .json file that swagger needs for documentation
 
+response.setStatus(200)
 json.response
         {
             success(true)
