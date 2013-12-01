@@ -25,8 +25,10 @@ DocBuilderService service = new DocBuilderServiceImpl()
 def getHttpBody()
 {
     def reader = request.reader
-    if (reader != null && reader.readLine() != null)
+    if (reader != null)
     {
+        // TODO - need to verify that the reader has a body or else this throws an exception
+
         // Assuming the body is JSON if there's anything in the body
         new JsonSlurper().parse(reader)
     }
