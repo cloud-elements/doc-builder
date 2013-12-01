@@ -45,7 +45,7 @@ def getHttpParameters()
 }
 
 // TODO - parse HTTP body and parameters and save them
-service.saveHttpRequest(request.getUri, getHttpParameters(), getHttpBody())
+service.saveHttpRequest(request.uri.toString(), getHttpParameters(), getHttpBody())
 
 // TODO - forward on to actual tomcat endpoint (should be property driven but default to localhost:8080)
 
