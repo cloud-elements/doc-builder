@@ -35,6 +35,8 @@ class DocBuilderServiceTest extends Specification
         docBuilderService.saveHttpRequest(url, queryParams, bodyParams)
 
         then:
+        // TODO - how do we want to verify that it worked.  compare the output file to the actual JSON file example
+        true == true
     }
 
     /**

@@ -19,7 +19,7 @@ class DocBuilderServiceImpl implements DocBuilderService
     {
         String apiMethod = getApiMethodName(url);
 
-        throw new RuntimeException("Method not implemented") // TODO - (jjwyse, 11/26/13)
+        // TODO
     }
 
     /**
@@ -39,6 +39,11 @@ class DocBuilderServiceImpl implements DocBuilderService
      */
     protected getApiMethodName(String url)
     {
-        url.substring(url.lastIndexOf('/') + 1, url.indexOf('?'))
+        int endIndex = url.length()
+        if (url.indexOf('?') >= 0)
+        {
+            endIndex = url.indexOf('?')
+        }
+        url.substring(url.lastIndexOf('/') + 1, endIndex)
     }
 }
