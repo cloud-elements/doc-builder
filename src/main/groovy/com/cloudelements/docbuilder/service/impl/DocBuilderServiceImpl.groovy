@@ -26,13 +26,14 @@ class DocBuilderServiceImpl implements DocBuilderService
      * {@inheritDoc}
      */
     @Override
-    def saveHttpResponse(url, parameters, body)
+    def saveHttpResponse(body)
     {
         throw new RuntimeException("Method not implemented") // TODO - (jjwyse, 11/26/13)
     }
 
     /**
-     * Parse out the last part of the URL (i.e. - /elements/getElement?id=1 should return getElement)
+     * Parse out the last part of the URL (i.e. - /elements/getElement?id=1 should return getElement or
+     * /elements/getElement should return getElement)
      *
      * @param url The URL to parse
      * @return The API that is being invoked
