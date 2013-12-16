@@ -3,6 +3,7 @@ package com.cloudelements.docbuilder.groovlet
 import com.cloudelements.docbuilder.domain.SwaggerMethod
 import com.cloudelements.docbuilder.domain.SwaggerMethodParameter
 import com.cloudelements.docbuilder.domain.SwaggerModel
+import com.cloudelements.docbuilder.domain.SwaggerModelProperty
 import groovy.json.JsonSlurper
 
 /**
@@ -19,6 +20,7 @@ import groovy.json.JsonSlurper
 def swaggerMethods = []
 def swaggerMethodParameters = []
 def swaggerModels = []
+def swaggerModelProperties = []
 
 /**
  * Parses the HTTP body payload from the HTTP request.  Assumes that's it is JSON
@@ -77,7 +79,9 @@ swaggerMethods << new SwaggerMethod(methodName: parseApiMethodName(request.uri.t
         model: "TODO",
         parameters: swaggerMethodParameters)
 
-swaggerModels << new SwaggerModel(id: "TODO")
+SwaggerModelProperty swaggerModelProperty = new SwaggerModelProperty(type: "TODO", description: "TODO")
+swaggerModelProperties << swaggerModelProperty;
+swaggerModels << new SwaggerModel(id: "TODO", properties: swaggerModelProperties)
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
