@@ -28,7 +28,21 @@
                     "parameterType": "query"
                 }
             ]
+        },
+
+        {
+            "methodName": "findContacts",
+            "description": "Find all contacts meeting the search criteria.",
+            "model": "Contacts",
+            "parameters": [
+                {
+                    "description": "The search filters and sort fields to find the contacts.",
+                    "model": "Find",
+                    "parameterType": "body"
+                }
+            ]
         }
+
     ],
 
     "models": [
