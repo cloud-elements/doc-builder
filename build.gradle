@@ -19,7 +19,7 @@ dependencies
 
 war
 {
-    baseName = 'elements' // change name from docbuilder.war --> elements.war to intercept /elements requests
+    baseName = 'elements' // change name from doc-builder.war --> elements.war to intercept /elements requests
     from 'src/main/groovy/com/cloudelements/docbuilder/groovlet' // add any groovlets to the root directory
 }
 

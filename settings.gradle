@@ -3,5 +3,5 @@
  * In a single project build this file can be empty or even removed.
  */
 
-rootProject.name = 'docbuilder'
+rootProject.name = 'doc-builder'
 
