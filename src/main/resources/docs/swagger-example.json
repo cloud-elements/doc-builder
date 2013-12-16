@@ -1,0 +1,298 @@
+{
+    "publish": true,
+
+    "description": "The Inspirato Integration Manager APIs",
+
+    "methods": [
+        {
+            "methodName": "createContact",
+            "description": "Create a new contact object.",
+            "model": "Contact",
+            "parameters": [
+                {
+                    "description": "The data for the Contact object to be created.",
+                    "model": "CreateContact",
+                    "parameterType": "body"
+                }
+            ]
+        },
+
+        {
+            "methodName": "retrieveContact",
+            "description": "Retrieve the Contact object associated with the given Contact ID.",
+            "model": "Contact",
+            "parameters": [
+                {
+                    "description": "The ID of the Contact object to be retrieved.",
+                    "parameterName": "id",
+                    "parameterType": "query"
+                }
+            ]
+        }
+    ],
+
+    "models": [
+        {
+            "id": "RetrieveContactObject",
+            "properties": {
+                "contactId": {
+                    "type": "string",
+                    "description": "The contact ID associated with this contact"
+                },
+                "createdById": {
+                    "type": "string",
+                    "description": "The user who created this contact."
+                },
+                "createdDate": {
+                    "type": "string",
+                    "description": "The date this contact was created. (Format: YYYY-MM-DDThh:mm:ss+hh:mm)"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "The email address for the contact"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "The ID of the contact"
+                },
+                "isDeleted": {
+                    "type": "boolean",
+                    "description": "Is this contact deleted?"
+                },
+                "lastModifiedById": {
+                    "type": "string",
+                    "description": "The last user who modified this contact."
+                },
+                "lastModifiedDate": {
+                    "type": "string",
+                    "description": "The last time this contact was modified. (Format: YYYY-MM-DDThh:mm:ss+hh:mm)"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the contact"
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "The phone number for the contact"
+                },
+                "residenceId": {
+                    "type": "string",
+                    "description": "The residence ID associated with this contact"
+                },
+                "role": {
+                    "type": "string",
+                    "description": "The role of the contact"
+                },
+                "roleNumber": {
+                    "type": "string",
+                    "description": "The role number of the contact"
+                },
+                "systemModDate": {
+                    "type": "string",
+                    "description": "The last time this contact was modified in the system"
+                }
+            }
+        },
+        {
+            "id": "FindContactObject",
+            "properties": {
+                "contactId": {
+                    "type": "string",
+                    "description": "The contact ID associated with this contact"
+                },
+                "createdById": {
+                    "type": "string",
+                    "description": "The user who created this contact."
+                },
+                "createdDate": {
+                    "type": "string",
+                    "description": "The date this contact was created. (Format: YYYY-MM-DDThh:mm:ss+hh:mm)"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "The ID of the contact"
+                },
+                "isDeleted": {
+                    "type": "boolean",
+                    "description": "Is this contact deleted?"
+                },
+                "lastModifiedById": {
+                    "type": "string",
+                    "description": "The last user who modified this contact."
+                },
+                "lastModifiedDate": {
+                    "type": "string",
+                    "description": "The last time this contact was modified. (Format: YYYY-MM-DDThh:mm:ss+hh:mm)"
+                },
+                "residenceId": {
+                    "type": "string",
+                    "description": "The residence ID associated with this contact"
+                },
+                "role": {
+                    "type": "string",
+                    "description": "The role of the contact"
+                },
+                "roleNumber": {
+                    "type": "string",
+                    "description": "The role number of the contact"
+                },
+                "systemModDate": {
+                    "type": "string",
+                    "description": "The last time this contact was modified in the system"
+                }
+            }
+        },
+        {
+            "id": "CreateContactObject",
+            "properties": {
+                "contactId": {
+                    "type": "string",
+                    "description": "The contact ID associated with this contact"
+                },
+                "residenceId": {
+                    "type": "string",
+                    "description": "The residence ID associated with this contact"
+                },
+                "role": {
+                    "type": "string",
+                    "description": "The role of the contact"
+                }
+            }
+        },
+        {
+            "id": "UpdateContactObject",
+            "required": ["id"],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The ID of the contact"
+                },
+                "contactId": {
+                    "type": "string",
+                    "description": "The contact ID associated with this contact"
+                },
+                "role": {
+                    "type": "string",
+                    "description": "The role of the contact"
+                }
+            }
+        },
+        {
+            "id": "Contact",
+            "properties": {
+                "contact": {
+                    "type": "RetrieveContactObject"
+                }
+            }
+        },
+        {
+            "id": "Contacts",
+            "properties": {
+                "contacts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "FindContactObject"
+                    }
+                }
+            }
+        },
+        {
+            "id": "CreateContact",
+            "properties": {
+                "contact": {
+                    "type": "CreateContactObject"
+                }
+            }
+        },
+        {
+            "id": "UpdateContact",
+            "properties": {
+                "contact": {
+                    "type": "UpdateContactObject"
+                }
+            }
+        },
+        {
+            "id": "Find",
+            "description": "The optional search filters and sort order to search.",
+            "required": [],
+            "properties": {
+                "filters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "SearchFilter"
+                    }
+                },
+                "sortBy": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "SortField"
+                    }
+                }
+            }
+        },
+        {
+            "id": "SearchFilter",
+            "description": "A filter object for searching.",
+            "required": ["field", "operator", "fieldValue", "dataType"],
+            "properties": {
+                "field": {
+                    "type": "string",
+                    "description": "The canonical name of the field."
+                },
+                "operator": {
+                    "type": "string",
+                    "description": "The filter operator.",
+                    "enum": [
+                        "equalTo", "notEqualTo", "lessThan", "greaterThan", "lessThanOrEqualTo",
+                        "greaterThanOrEqualTo", "startsWith", "isNull"
+                    ]
+                },
+                "dataType": {
+                    "type": "string",
+                    "description": "The data type of the filter value.",
+                    "enum": [
+                        "string", "integer", "long", "float", "double"
+                    ]
+                },
+                "fieldValue": {
+                    "type": "string",
+                    "description": "The string representation of the filter value."
+                },
+                "useOr": {
+                    "type": "boolean",
+                    "description": "A flag representing if an OR condition should be used for this filter. The default condition is AND."
+                },
+                "openParen": {
+                    "type": "boolean",
+                    "description": "Open a parenthesis for the filter if required. Each openParen flag requires a close parenFlag."
+                },
+                "closeParen": {
+                    "type": "boolean",
+                    "description": "Close an open parenthesis for the filter."
+                }
+            }
+        },
+        {
+            "id": "SortField",
+            "description": "A sort field for search results.",
+            "required": ["field"],
+            "properties": {
+                "field": {
+                    "type": "string",
+                    "description": "The canonical name of the field to sort by"
+                },
+                "order": {
+                    "type": "string",
+                    "description": "The sort order.",
+                    "enum": [
+                        "asc", "desc"
+                    ]
+                }
+            }
+        }
+    ]
+}
+
+
+

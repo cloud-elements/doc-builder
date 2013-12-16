@@ -1,7 +1,6 @@
 package com.cloudelements.docbuilder.groovlet
 
-import com.cloudelements.docbuilder.service.DocBuilderService
-import com.cloudelements.docbuilder.service.impl.DocBuilderServiceImpl
+import com.cloudelements.docbuilder.domain.SwaggerMethod
 import groovy.json.JsonSlurper
 
 /**
@@ -15,7 +14,7 @@ import groovy.json.JsonSlurper
  * @since: 11/24/13
  */
 
-DocBuilderService service = new DocBuilderServiceImpl()
+def swaggerMethods = []
 
 /**
  * Parses the HTTP body payload from the HTTP request.  Assumes that's it is JSON
@@ -44,16 +43,42 @@ def getHttpParameters()
     request.parameters
 }
 
-// TODO - parse HTTP body and parameters and save them
-service.saveHttpRequest(request.uri.toString(), getHttpParameters(), getHttpBody())
+/**
+ * Parse out the last part of the URL (i.e. - /elements/getElement?id=1 should return getElement or
+ * /elements/getElement should return getElement)
+ *
+ * @param url The URL to parse
+ * @return The API that is being invoked
+ */
+def parseApiMethodName(String url)
+{
+    int endIndex = url.length()
+    if (url.indexOf('?') >= 0)
+    {
+        endIndex = url.indexOf('?')
+    }
+    url.substring(url.lastIndexOf('/') + 1, endIndex)
+}
 
-// TODO - forward on to actual tomcat endpoint (should be property driven but default to localhost:8080)
+def parameters = [description: "TODO", model: "TODO", parameterType: "body"]
+if (request.method == "GET" || request.method == "DELETE")
+{
+    parameters << [parameterType: "query"]
+}
 
-// TODO - parse JSON response
-service.saveHttpResponse(null)
+swaggerMethods << new SwaggerMethod(methodName: parseApiMethodName(request.uri.toString()),
+        description: "TODO",
+        model: "TODO",
+        parameters: parameters)
 
+// Construct JSON which represents the Swagger model JSON
 response.setStatus(200)
-json.response
-        {
-            success(true)
-        }
+json {
+    publish(true)
+    description("Test")
+    methods(
+            swaggerMethods.each({
+                swaggerMethod ->
+            })
+    )
+}
