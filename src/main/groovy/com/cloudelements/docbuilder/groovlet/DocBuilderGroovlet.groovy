@@ -1,6 +1,8 @@
 package com.cloudelements.docbuilder.groovlet
 
 import com.cloudelements.docbuilder.domain.SwaggerMethod
+import com.cloudelements.docbuilder.domain.SwaggerMethodParameter
+import com.cloudelements.docbuilder.domain.SwaggerModel
 import groovy.json.JsonSlurper
 
 /**
@@ -15,6 +17,8 @@ import groovy.json.JsonSlurper
  */
 
 def swaggerMethods = []
+def swaggerMethodParameters = []
+def swaggerModels = []
 
 /**
  * Parses the HTTP body payload from the HTTP request.  Assumes that's it is JSON
@@ -60,25 +64,37 @@ def parseApiMethodName(String url)
     url.substring(url.lastIndexOf('/') + 1, endIndex)
 }
 
-def parameters = [description: "TODO", model: "TODO", parameterType: "body"]
+SwaggerMethodParameter parameter = new SwaggerMethodParameter(description: "TODO", parameterName: "TODO",
+        parameterType: "body", model: "TODO")
 if (request.method == "GET" || request.method == "DELETE")
 {
-    parameters << [parameterType: "query"]
+    parameter.parameterType = "query"
 }
+swaggerMethodParameters << parameter
 
 swaggerMethods << new SwaggerMethod(methodName: parseApiMethodName(request.uri.toString()),
         description: "TODO",
         model: "TODO",
-        parameters: parameters)
+        parameters: swaggerMethodParameters)
 
-// Construct JSON which represents the Swagger model JSON
+swaggerModels << new SwaggerModel(id: "TODO")
+
+// Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
 json {
     publish(true)
-    description("Test")
+    description("TODO")
     methods(
             swaggerMethods.each({
                 swaggerMethod ->
+                    swaggerMethod.parameters.each({
+                        swaggerMethodParameter ->
+                    })
+            })
+    )
+    models(
+            swaggerModels.each({
+                swaggerModel ->
             })
     )
 }

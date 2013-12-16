@@ -11,5 +11,5 @@ class SwaggerMethod
     String methodName;
     String description;
     String model;
-    def parameters = [];
+    List<SwaggerMethodParameter> parameters;
 }
