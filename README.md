@@ -1,6 +1,6 @@
-#docbuilder
+#doc-builder
 =========
-Self-documents RESTful services by analyzing the request and response JSON payloads
+Self-documents RESTful services by analyzing the request and response JSON payloads and generating the Swagger JSON documentation.
 
 #Setup
 =========
