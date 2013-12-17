@@ -20,33 +20,35 @@ import groovy.json.JsonSlurper
 def swaggerMethods = []
 def swaggerMethodParameters = []
 def swaggerModels = []
-def swaggerModelProperties = []
 
-/**
- * Parses the HTTP body payload from the HTTP request.  Assumes that's it is JSON
- *
- * @return The JSON slurper
- */
-def getHttpBody()
+def createSwaggerModels()
 {
     def reader = request.reader
-    if (reader != null)
+    if (reader == null)
     {
-        // TODO - need to verify that the reader has a body or else this throws an exception
-
-        // Assuming the body is JSON if there's anything in the body
-        new JsonSlurper().parse(reader)
+        return
     }
-}
 
-/**
- * Parses the HTTP request URL parameters
- *
- * @return The URL parameters in the HTTP request
- */
-def getHttpParameters()
-{
-    request.parameters
+    // Assuming the body is JSON if there's anything in the body
+    HashMap httpBody = new JsonSlurper().parse(reader)
+
+    def builder = new groovy.json.JsonBuilder()
+
+    httpBody.each {
+        mapKey ->
+            if (mapKey instanceof HashMap)
+            {
+                swaggerModels << new SwaggerModel(
+                        id: parseApiMethodName(request.uri.toString() + "Object"),
+                        properties: createModelProperties())
+
+                SwaggerModelProperty swaggerModelProperty = new SwaggerModelProperty(
+                        type: "TODO",
+                        description: "TODO")
+            }
+    }
+
+    return swaggerModels
 }
 
 /**
@@ -66,22 +68,22 @@ def parseApiMethodName(String url)
     url.substring(url.lastIndexOf('/') + 1, endIndex)
 }
 
-SwaggerMethodParameter parameter = new SwaggerMethodParameter(description: "TODO", parameterName: "TODO",
-        parameterType: "body", model: "TODO")
+SwaggerMethodParameter parameter = new SwaggerMethodParameter(
+        description: "TODO",
+        parameterName: "TODO",
+        parameterType: "body",
+        model: "TODO")
 if (request.method == "GET" || request.method == "DELETE")
 {
     parameter.parameterType = "query"
 }
 swaggerMethodParameters << parameter
 
-swaggerMethods << new SwaggerMethod(methodName: parseApiMethodName(request.uri.toString()),
+swaggerMethods << new SwaggerMethod(
+        methodName: parseApiMethodName(request.uri.toString()),
         description: "TODO",
-        model: "TODO",
+        model: parseApiMethodName(request.uri.toString() + "Object"),
         parameters: swaggerMethodParameters)
-
-SwaggerModelProperty swaggerModelProperty = new SwaggerModelProperty(type: "TODO", description: "TODO")
-swaggerModelProperties << swaggerModelProperty;
-swaggerModels << new SwaggerModel(id: "TODO", properties: swaggerModelProperties)
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
@@ -96,9 +98,5 @@ json {
                     })
             })
     )
-    models(
-            swaggerModels.each({
-                swaggerModel ->
-            })
-    )
+    createSwaggerModels()
 }
