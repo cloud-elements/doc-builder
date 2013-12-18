@@ -10,13 +10,26 @@ import spock.lang.Specification
  */
 class DocBuilderGroovletTest extends Specification
 {
+    DocBuilderGroovlet docBuilderGroovlet
+
     def setup()
     {
-
+        docBuilderGroovlet = new DocBuilderGroovlet()
     }
 
     def "Test creating models from incoming JSON"()
     {
-        expect: true
+        given:
+        HashMap hashMap = new HashMap()
+        HashMap contact = new HashMap()
+        contact.put("id", "123")
+        hashMap.put("contact", contact)
+
+        when:
+        def response = docBuilderGroovlet.createSwaggerModels(hashMap, "TestObject");
+
+        then:
+        response != null
+        print response
     }
 }

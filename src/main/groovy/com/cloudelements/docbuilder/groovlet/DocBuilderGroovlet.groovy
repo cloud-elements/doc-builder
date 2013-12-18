@@ -19,32 +19,28 @@ import groovy.json.JsonSlurper
 
 def swaggerMethods = []
 def swaggerMethodParameters = []
-def swaggerModels = []
 
-def createSwaggerModels()
+def createSwaggerModels(HashMap httpBody, String modelId)
 {
-    def reader = request.reader
-    if (reader == null)
-    {
-        return
-    }
-
-    // Assuming the body is JSON if there's anything in the body
-    HashMap httpBody = new JsonSlurper().parse(reader)
+    def swaggerModels = []
 
     def builder = new groovy.json.JsonBuilder()
 
     httpBody.each {
-        mapKey ->
-            if (mapKey instanceof HashMap)
+        mapKey, mapValue ->
+            if (mapValue instanceof HashMap)
             {
-                swaggerModels << new SwaggerModel(
-                        id: parseApiMethodName(request.uri.toString() + "Object"),
-                        properties: createModelProperties())
-
                 SwaggerModelProperty swaggerModelProperty = new SwaggerModelProperty(
                         type: "TODO",
                         description: "TODO")
+
+                def swaggerProperties = []
+                swaggerProperties << swaggerModelProperty
+
+                swaggerModels << new SwaggerModel(
+                        id: modelId,
+                        properties: swaggerProperties)
+
             }
     }
 
@@ -98,5 +94,11 @@ json {
                     })
             })
     )
-    createSwaggerModels()
+    if (request.method == "POST" || request.method == "PUT")
+    {
+        models(
+                createSwaggerModels(new JsonSlurper().parse(request.reader), parseApiMethodName(request.uri.toString
+                        ()) + "Object").each { swaggerModel -> }
+        )
+    }
 }
