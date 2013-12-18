@@ -17,16 +17,14 @@ import groovy.json.JsonSlurper
  * @since: 11/24/13
  */
 
-def swaggerMethods = []
-def swaggerMethodParameters = []
 
-def createSwaggerModels(HashMap httpBody, String modelId)
+def createSwaggerModels(HashMap jsonMap, String modelId)
 {
     def swaggerModels = []
 
     def builder = new groovy.json.JsonBuilder()
 
-    httpBody.each {
+    jsonMap.each {
         mapKey, mapValue ->
             if (mapValue instanceof HashMap)
             {
@@ -73,8 +71,11 @@ if (request.method == "GET" || request.method == "DELETE")
 {
     parameter.parameterType = "query"
 }
+
+def swaggerMethodParameters = []
 swaggerMethodParameters << parameter
 
+def swaggerMethods = []
 swaggerMethods << new SwaggerMethod(
         methodName: parseApiMethodName(request.uri.toString()),
         description: "TODO",
