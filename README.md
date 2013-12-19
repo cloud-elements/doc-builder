@@ -1,4 +1,4 @@
-![alt tag](https://pbs.twimg.com/profile_images/3345848205/67e4eda53c9e46253efc01b5032f2e0d.png)
+![alt tag](http://stack.to/wp-content/uploads//Cloud-Elements.png)
 
 #doc-builder
 =========
