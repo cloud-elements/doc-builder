@@ -11,5 +11,4 @@ Self-documents RESTful services by analyzing the request and response JSON paylo
 3. Use gradle to build and run the web application
    * gradle clean jettyRunWar 
 
-Built by...
 ![alt tag](http://stack.to/wp-content/uploads//Cloud-Elements.png)
