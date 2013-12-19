@@ -1,3 +1,5 @@
+![alt tag](https://pbs.twimg.com/profile_images/3345848205/67e4eda53c9e46253efc01b5032f2e0d.png)
+
 #doc-builder
 =========
 Self-documents RESTful services by analyzing the request and response JSON payloads and generating the Swagger JSON documentation.
