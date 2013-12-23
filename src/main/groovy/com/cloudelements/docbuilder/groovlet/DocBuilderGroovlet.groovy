@@ -17,19 +17,34 @@ import groovy.json.JsonSlurper
  * @since: 11/24/13
  */
 
+def createSwaggerModel(String modelId, String value)
+{
+    def swaggerProperties = []
+    SwaggerModel swaggerModel = new SwaggerModel(id: modelId, properties: swaggerProperties)
+
+    // might be a better way to do this (what i'm doing here is: retrieve 'boolean' from java.lang
+    // .Boolean, etc.)
+    String className = value.getClass().name;
+    String type = className.substring(className.lastIndexOf('.') + 1).toLowerCase()
+
+    SwaggerModelProperty swaggerModelProperty = new SwaggerModelProperty(type: "$type", description: "TODO ($value)")
+
+    swaggerProperties << swaggerModelProperty
+
+    swaggerModel <<
+
+    return swaggerModel
+}
+
 
 def createSwaggerModels(HashMap jsonMap, String modelId)
 {
     def swaggerModels = []
 
     // If it's a hash map then we need to start creating a new model
-    def swaggerProperties = []
-    swaggerModels << new SwaggerModel(
-            id: modelId,
-            properties: swaggerProperties)
-
     jsonMap.each {
         mapKey, mapValue ->
+            SwaggerModel swaggerModel
             if (mapValue instanceof HashMap)
             {
                 // TODO - recurse to create another model
@@ -40,20 +55,9 @@ def createSwaggerModels(HashMap jsonMap, String modelId)
             }
             else
             {
-                // TODO - if it isn't a hash map or list then it's a primitive type
-                // TODO -   * add it to the current model we're working with
-
-                // might be a better way to do this (what i'm doing here is: retrieve 'boolean' from java.lang
-                // .Boolean, etc.)
-                String className = mapValue.getClass().name;
-                String type = className.substring(className.lastIndexOf('.') + 1).toLowerCase()
-
-                SwaggerModelProperty swaggerModelProperty = new SwaggerModelProperty(
-                        type: "$type",
-                        description: "TODO ($mapValue)")
-
-                swaggerProperties << swaggerModelProperty
+                swaggerModel = createSwaggerModel(modelId, jsonMap);
             }
+            swaggerModels << swaggerModel
     }
 
     return swaggerModels
@@ -112,8 +116,11 @@ json {
     if (request.method == "POST" || request.method == "PUT")
     {
         models(
-                createSwaggerModels(new JsonSlurper().parse(request.reader), parseApiMethodName(request.uri.toString
-                        ()) + "Object").each { swaggerModel -> }
+                createSwaggerModels(
+                        new JsonSlurper().parse(request.reader), parseApiMethodName(request.uri.toString()) +
+                        "Object").each {
+                    swaggerModel ->
+                }
         )
     }
 }
