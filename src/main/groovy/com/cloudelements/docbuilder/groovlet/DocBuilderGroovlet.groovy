@@ -31,7 +31,7 @@ def createSwaggerModel(String modelId, String value)
 
     swaggerProperties << swaggerModelProperty
 
-    swaggerModel <<
+    swaggerModel << swaggerProperties
 
     return swaggerModel
 }
