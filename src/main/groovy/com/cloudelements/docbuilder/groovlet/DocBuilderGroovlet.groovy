@@ -22,23 +22,37 @@ def createSwaggerModels(HashMap jsonMap, String modelId)
 {
     def swaggerModels = []
 
-    def builder = new groovy.json.JsonBuilder()
+    // If it's a hash map then we need to start creating a new model
+    def swaggerProperties = []
+    swaggerModels << new SwaggerModel(
+            id: modelId,
+            properties: swaggerProperties)
 
     jsonMap.each {
         mapKey, mapValue ->
             if (mapValue instanceof HashMap)
             {
+                // TODO - recurse to create another model
+            }
+            else if (mapValue instanceof List)
+            {
+                // TODO - recurse to create another model
+            }
+            else
+            {
+                // TODO - if it isn't a hash map or list then it's a primitive type
+                // TODO -   * add it to the current model we're working with
+
+                // might be a better way to do this (what i'm doing here is: retrieve 'boolean' from java.lang
+                // .Boolean, etc.)
+                String className = mapValue.getClass().name;
+                String type = className.substring(className.lastIndexOf('.') + 1).toLowerCase()
+
                 SwaggerModelProperty swaggerModelProperty = new SwaggerModelProperty(
-                        type: "TODO",
-                        description: "TODO")
+                        type: "$type",
+                        description: "TODO ($mapValue)")
 
-                def swaggerProperties = []
                 swaggerProperties << swaggerModelProperty
-
-                swaggerModels << new SwaggerModel(
-                        id: modelId,
-                        properties: swaggerProperties)
-
             }
     }
 

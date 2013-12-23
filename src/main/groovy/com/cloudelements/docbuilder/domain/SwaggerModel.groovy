@@ -12,6 +12,6 @@ import groovy.transform.ToString
 class SwaggerModel
 {
     String id;
-    List required;
+    List <String> required;
     List<SwaggerModelProperty> properties;
 }
