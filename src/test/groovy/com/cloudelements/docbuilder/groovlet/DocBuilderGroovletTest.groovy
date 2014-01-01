@@ -22,14 +22,13 @@ class DocBuilderGroovletTest extends Specification
         docBuilderGroovlet = new DocBuilderGroovlet()
     }
 
-    def "Test create 'method' JSON - GET"()
+    def "Test create 'method' JSON with no JSON body"()
     {
         given:
-        String httpMethod = "GET"
         String uri = baseUri + "/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO"
 
         when:
-        def response = docBuilderGroovlet.createSwaggerMethods(httpMethod, uri)
+        def response = docBuilderGroovlet.createSwaggerMethods(uri, null)
 
         then:
         response != null

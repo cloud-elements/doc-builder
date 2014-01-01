@@ -1,7 +1,7 @@
 package com.cloudelements.docbuilder.groovlet
 
 import com.cloudelements.docbuilder.domain.SwaggerMethod
-import com.cloudelements.docbuilder.domain.SwaggerMethodParameter
+import com.cloudelements.docbuilder.domain.SwaggerMethodQueryParameter
 import com.cloudelements.docbuilder.domain.SwaggerModel
 import com.cloudelements.docbuilder.domain.SwaggerModelProperty
 import groovy.json.JsonSlurper
@@ -37,12 +37,12 @@ def private createSwaggerModel(String modelId, String value)
 }
 
 
-def createSwaggerModels(HashMap jsonMap, String modelId)
+def createSwaggerModels(HashMap json, String modelId)
 {
     def swaggerModels = []
 
     // If it's a hash map then we need to start creating a new model
-    jsonMap.each {
+    json.each {
         mapKey, mapValue ->
             SwaggerModel swaggerModel
             if (mapValue instanceof HashMap)
@@ -55,7 +55,7 @@ def createSwaggerModels(HashMap jsonMap, String modelId)
             }
             else
             {
-                swaggerModel = createSwaggerModel(modelId, jsonMap);
+                swaggerModel = createSwaggerModel(modelId, json);
             }
             swaggerModels << swaggerModel
     }
@@ -106,23 +106,29 @@ def private parseQueryParameters(String url)
 }
 
 /**
- * @param url
- * @return
+ * Handles creating the parameters list for a given HTTP request
+ *
+ * @param url The full URL with the potential HTTP query parameters on the end
+ * @param json The potential JSON payload on the HTTP request
+ * @return The list of parameters that are a part of the 'method' JSON
  */
-def createMethodParameters(String url)
+def createMethodParameters(String url, HashMap json)
 {
     def swaggerMethodParameters = []
 
+    // Create the query parameters
     def queryParameters = parseQueryParameters(url)
 
     queryParameters.each { key, value ->
-        SwaggerMethodParameter parameter = new SwaggerMethodParameter(
-                description: "TODO (In this case the value of this parameter was $value)",
+        SwaggerMethodQueryParameter parameter = new SwaggerMethodQueryParameter(
+                description: "TODO ($value)",
                 parameterName: "$key",
                 parameterType: "query") // any parameters we're adding here must be query parameters, not body
 
         swaggerMethodParameters << parameter
     }
+
+    // TODO - create the body parameters
 
     return swaggerMethodParameters
 }
@@ -130,16 +136,39 @@ def createMethodParameters(String url)
 /**
  * Create the 'method' JSON object that will go in the 'methods' section of the JSON result
  *
+ * @param url The full URL of the endpoint with the query parameters included
+ * @param json The potential JSON on the HTTP request body
  * @return A list of swagger method objects {@link SwaggerMethod}
  */
-def createSwaggerMethods(String url)
+def createSwaggerMethods(String url, HashMap json)
 {
     def swaggerMethods = []
     swaggerMethods << new SwaggerMethod(
             methodName: parseApiMethodName(url),
             description: "TODO",
             model: parseApiMethodName(url + "Object"),
-            parameters: createMethodParameters(url))
+            parameters: createMethodParameters(url, json))
+}
+
+/**
+ * Get the possible JSON off of the HTTP request
+ *
+ * @return The map representation of the JSON or null if none existed or there was a problem parsing it
+ */
+def getJson()
+{
+    HashMap json = null
+
+    try
+    {
+        json = new JsonSlurper().parse(request.reader)
+    }
+    catch (Exception exception)
+    {
+        // eat it - this can happen if it's a GET or DELETE request which won't have any JSON
+        // body or if the JSON body is just empty on a POST, PUT, PATCH, etc.
+    }
+    return json
 }
 
 // Construct JSON which represents the Swagger Documentation
@@ -148,7 +177,7 @@ json {
     publish(true)
     description("TODO")
     methods(
-            createSwaggerMethods(request.method, request.uri.toString()).each({
+            createSwaggerMethods(request.uri.toString(), getJson()).each({
                 swaggerMethod ->
                     swaggerMethod.parameters.each({
                         swaggerMethodParameter ->
@@ -158,9 +187,7 @@ json {
     if (request.method == "POST" || request.method == "PUT")
     {
         models(
-                createSwaggerModels(
-                        new JsonSlurper().parse(request.reader), parseApiMethodName(request.uri.toString()) +
-                        "Object").each {
+                createSwaggerModels(getJson(), parseApiMethodName(request.uri.toString()) + "Object").each {
                     swaggerModel ->
                 }
         )

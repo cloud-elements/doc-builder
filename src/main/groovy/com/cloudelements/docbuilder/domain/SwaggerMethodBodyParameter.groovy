@@ -9,8 +9,7 @@ import groovy.transform.ToString
  * @author jjwyse
  */
 @ToString
-abstract class SwaggerMethodParameter
+class SwaggerMethodBodyParameter extends SwaggerMethodParameter
 {
-    String description
-    String parameterType
+    String model
 }
