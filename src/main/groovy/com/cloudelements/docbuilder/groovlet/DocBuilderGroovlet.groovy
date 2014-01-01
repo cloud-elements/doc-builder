@@ -17,7 +17,7 @@ import groovy.json.JsonSlurper
  * @since: 11/24/13
  */
 
-def createSwaggerModel(String modelId, String value)
+def private createSwaggerModel(String modelId, String value)
 {
     def swaggerProperties = []
     SwaggerModel swaggerModel = new SwaggerModel(id: modelId, properties: swaggerProperties)
@@ -70,7 +70,7 @@ def createSwaggerModels(HashMap jsonMap, String modelId)
  * @param url The URL to parse
  * @return The API that is being invoked
  */
-def parseApiMethodName(String url)
+def private parseApiMethodName(String url)
 {
     int endIndex = url.length()
     if (url.indexOf('?') >= 0)
@@ -80,25 +80,67 @@ def parseApiMethodName(String url)
     url.substring(url.lastIndexOf('/') + 1, endIndex)
 }
 
-SwaggerMethodParameter parameter = new SwaggerMethodParameter(
-        description: "TODO",
-        parameterName: "TODO",
-        parameterType: "body",
-        model: "TODO")
-if (request.method == "GET" || request.method == "DELETE")
+/**
+ * Parse out the query parameters from a full URL (i.e. -
+ * http://snapshot.cloud-elements.com/api-v1/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO)
+ * should return a map of [objectName->residence, id->a1v30000000LKYwAAO]
+ *
+ * @param url The full url beginning with http and ending with potential query parameters
+ */
+def private parseQueryParameters(String url)
 {
-    parameter.parameterType = "query"
+    int endIndex = url.length()
+    if (url.indexOf('?') >= 0)
+    {
+        endIndex = url.indexOf('?')
+    }
+    Map queryParametersMap = new HashMap()
+
+    String queryParametersString = url.substring(endIndex + 1)
+    queryParametersString.split('&').each {
+        queryParameter ->
+            queryParametersMap.put(queryParameter.split('=')[0], queryParameter.split('=')[1])
+    }
+
+    return queryParametersMap
 }
 
-def swaggerMethodParameters = []
-swaggerMethodParameters << parameter
+/**
+ * @param url
+ * @return
+ */
+def createMethodParameters(String url)
+{
+    def swaggerMethodParameters = []
 
-def swaggerMethods = []
-swaggerMethods << new SwaggerMethod(
-        methodName: parseApiMethodName(request.uri.toString()),
-        description: "TODO",
-        model: parseApiMethodName(request.uri.toString() + "Object"),
-        parameters: swaggerMethodParameters)
+    def queryParameters = parseQueryParameters(url)
+
+    queryParameters.each { key, value ->
+        SwaggerMethodParameter parameter = new SwaggerMethodParameter(
+                description: "TODO (In this case the value of this parameter was $value)",
+                parameterName: "$key",
+                parameterType: "query") // any parameters we're adding here must be query parameters, not body
+
+        swaggerMethodParameters << parameter
+    }
+
+    return swaggerMethodParameters
+}
+
+/**
+ * Create the 'method' JSON object that will go in the 'methods' section of the JSON result
+ *
+ * @return A list of swagger method objects {@link SwaggerMethod}
+ */
+def createSwaggerMethods(String url)
+{
+    def swaggerMethods = []
+    swaggerMethods << new SwaggerMethod(
+            methodName: parseApiMethodName(url),
+            description: "TODO",
+            model: parseApiMethodName(url + "Object"),
+            parameters: createMethodParameters(url))
+}
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
@@ -106,7 +148,7 @@ json {
     publish(true)
     description("TODO")
     methods(
-            swaggerMethods.each({
+            createSwaggerMethods(request.method, request.uri.toString()).each({
                 swaggerMethod ->
                     swaggerMethod.parameters.each({
                         swaggerMethodParameter ->
