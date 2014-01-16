@@ -13,5 +13,5 @@ class SwaggerModel
 {
     String id;
     List <String> required;
-    List<SwaggerModelProperty> properties;
+    Map<String, Map<String, SwaggerModelProperty>> properties;
 }
