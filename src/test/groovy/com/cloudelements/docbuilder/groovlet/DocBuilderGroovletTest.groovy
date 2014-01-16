@@ -28,7 +28,7 @@ class DocBuilderGroovletTest extends Specification
         String uri = baseUri + "/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO"
 
         when:
-        def response = docBuilderGroovlet.createSwaggerMethods(uri, null)
+        def response = docBuilderGroovlet.createSwaggerMethod(uri, null)
 
         then:
         response != null

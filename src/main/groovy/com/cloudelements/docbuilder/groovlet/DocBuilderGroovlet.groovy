@@ -140,7 +140,7 @@ def createMethodParameters(String url, HashMap json)
  * @param json The potential JSON on the HTTP request body
  * @return A list of swagger method objects {@link SwaggerMethod}
  */
-def createSwaggerMethods(String url, HashMap json)
+def createSwaggerMethod(String url, HashMap json)
 {
     def swaggerMethods = []
     swaggerMethods << new SwaggerMethod(
@@ -171,25 +171,29 @@ def getJson()
     return json
 }
 
+// TODO - save request method and model
+List<SwaggerMethod> swaggerMethods = createSwaggerMethod(request.uri.toString(), getJson())
+List<SwaggerModel> swaggerModels = createSwaggerModels(getJson(), parseApiMethodName(request.uri.toString()) + "Object")
+
+// TODO - forward request to localhost:8080
+
+
+// TODO - save response model to swaggerModels
+
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
 json {
-    publish(true)
-    description("TODO")
     methods(
-            createSwaggerMethods(request.uri.toString(), getJson()).each({
+            swaggerMethods.each({
                 swaggerMethod ->
                     swaggerMethod.parameters.each({
                         swaggerMethodParameter ->
                     })
             })
     )
-    if (request.method == "POST" || request.method == "PUT")
-    {
-        models(
-                createSwaggerModels(getJson(), parseApiMethodName(request.uri.toString()) + "Object").each {
-                    swaggerModel ->
-                }
-        )
-    }
+    models(
+            swaggerModels.each {
+                swaggerModel ->
+            }
+    )
 }
