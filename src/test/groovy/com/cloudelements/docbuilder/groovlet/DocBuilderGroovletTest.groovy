@@ -15,7 +15,7 @@ class DocBuilderGroovletTest extends Specification
 {
     DocBuilderGroovlet docBuilderGroovlet
 
-    String baseUri = "http://localhost:8080/elements/api-vi"
+    String baseUrl = "http://localhost:8080/elements/api-vi"
 
     def setup()
     {
@@ -25,10 +25,11 @@ class DocBuilderGroovletTest extends Specification
     def "Test create 'method' JSON with no JSON body"()
     {
         given:
-        String uri = baseUri + "/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO"
+        String url = baseUrl + "/crm/retrieveObject"
+        def params = ['objectName': 'residence', 'id': 'a1v30000000LKYwAAO']
 
         when:
-        def response = docBuilderGroovlet.createSwaggerMethod(uri, null)
+        def response = docBuilderGroovlet.createSwaggerMethod(url, params, 'GET')
 
         then:
         response != null

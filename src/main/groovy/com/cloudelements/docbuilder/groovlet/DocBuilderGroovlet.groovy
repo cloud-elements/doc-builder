@@ -77,10 +77,10 @@ def private parseApiMethodName(String url) {
  * @param json The potential JSON payload on the HTTP request
  * @return The list of parameters that are a part of the 'method' JSON
  */
-def createMethodParameters(String modelName) {
+def createMethodParameters(String modelName, HashMap queryParams, String httpMethod) {
    def swaggerMethodParameters = []
 
-   params.each { key, value ->
+   queryParams.each { key, value ->
       SwaggerMethodQueryParameter queryParameter = new SwaggerMethodQueryParameter(
             description: "TODO ($value)",
             parameterName: "$key",
@@ -89,24 +89,25 @@ def createMethodParameters(String modelName) {
       swaggerMethodParameters << queryParameter
    }
 
-   SwaggerMethodBodyParameter bodyParameter = new SwaggerMethodBodyParameter(
-         description: "TODO",
-         parameterType: "body",
-         model: modelName
-   )
-
-   swaggerMethodParameters << bodyParameter
+   if (httpMethod.equalsIgnoreCase('POST') || httpMethod.equalsIgnoreCase('PUT')) {
+      SwaggerMethodBodyParameter bodyParameter = new SwaggerMethodBodyParameter(
+            description: "TODO",
+            parameterType: "body",
+            model: modelName
+      )
+      swaggerMethodParameters << bodyParameter
+   }
 
    return swaggerMethodParameters
 }
 
-def createSwaggerMethod(String url) {
+def createSwaggerMethod(String url, HashMap params, String httpMethod) {
    def swaggerMethods = []
    swaggerMethods << new SwaggerMethod(
          methodName: parseApiMethodName(url),
          description: "TODO",
          model: parseApiMethodName(url) + "ResponseObject",
-         parameters: createMethodParameters(parseApiMethodName(url) + "RequestObject"))
+         parameters: createMethodParameters(parseApiMethodName(url) + "RequestObject", params, httpMethod))
 }
 
 def getJson() {
@@ -123,7 +124,7 @@ def getJson() {
 }
 
 // Create the request methods and models
-swaggerMethods = createSwaggerMethod(request.uri.toString())
+swaggerMethods = createSwaggerMethod(request.uri.toString(), params, request.method)
 swaggerModels = createSwaggerModels(getJson(), parseApiMethodName(request.uri.toString()) + "RequestObject")
 
 // Send the request to the elements code and create the response model
