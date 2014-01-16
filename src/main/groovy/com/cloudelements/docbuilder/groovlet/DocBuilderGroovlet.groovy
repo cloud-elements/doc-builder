@@ -129,12 +129,19 @@ swaggerModels = createSwaggerModels(getJson(), parseApiMethodName(request.uri.to
 
 // Send the request to the elements code and create the response model
 def http = new HTTPBuilder('http://localhost:8080/' + request.uri.toString())
-http.setHeaders(headers)
+Map elementsHeader = http.getHeaders()
+elementsHeader.putAt("Authorization", headers.get("Authorization"))
+http.setHeaders(elementsHeader)
 http.request(Method.valueOf(request.method), JSON) {
 
    response.success = { resp, json ->
       assert resp.status == 200
       swaggerModels.addAll createSwaggerModels(json, parseApiMethodName(uri.toString()) + "ResponseObject")
+   }
+
+   response.failure = { resp ->
+      println 'Failure'
+      println 'Response Status: ' + resp.statusLine.statusCode
    }
 
    response.'404' = { resp ->
