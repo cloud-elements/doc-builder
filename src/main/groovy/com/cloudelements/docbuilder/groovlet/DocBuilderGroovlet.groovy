@@ -45,8 +45,11 @@ def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel,
             createSwaggerModels(mapValue, mapKey + 'Object', null, swaggerModels)
          }
          else if (mapValue instanceof List) {
-            // TODO
-            swaggerModel.addProperty(mapKey, new SwaggerModelArrayProperty(type: 'array'))
+            Map<String, String> items = new HashMap<>();
+            items.put('$ref', mapKey + "Object")
+
+            swaggerModel.addProperty(mapKey, new SwaggerModelArrayProperty(type: 'array', items: items))
+            createSwaggerModels(mapValue.get(0), mapKey + 'Object', null, swaggerModels)
          }
          else {
             swaggerModel.addProperty(mapKey, new SwaggerModelDescriptionProperty(type: parseType(mapValue),

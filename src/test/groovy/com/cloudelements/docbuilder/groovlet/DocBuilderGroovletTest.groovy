@@ -91,7 +91,6 @@ class DocBuilderGroovletTest extends Specification {
          last_name 'wyse'
          is_developer true
          age 25
-         hobbies 'running', 'developing', 'reading'
          height 71.5
       }
 
@@ -115,4 +114,42 @@ class DocBuilderGroovletTest extends Specification {
       print jsonBuilderResponse.toPrettyString()
    }
 
+   def "Test create 'model' JSON with an array"() {
+      given:
+      JsonBuilder jsonBuilder = new JsonBuilder()
+
+      Map<String, String> hobbyOne = new HashMap<>();
+      hobbyOne.put("name", "reading")
+
+      Map<String, String> hobbyTwo = new HashMap<>();
+      hobbyTwo.put("name", "running")
+      def root = jsonBuilder.person {
+         first_name 'josh'
+         last_name 'wyse'
+         is_developer true
+         age 25
+         hobbies hobbyOne, hobbyTwo
+         height 71.5
+      }
+      print root
+
+      when:
+      def response = docBuilderGroovlet.createSwaggerModels(root, "createPersonWithHobbies", null, null);
+
+      then:
+      response != null
+      response instanceof List
+//      response.size() == 3
+
+      // print it out prettily to the console
+      JsonBuilder jsonBuilderResponse = new JsonBuilder()
+      jsonBuilderResponse {
+         models(
+               response.each {
+                  responseSwaggerModel ->
+               }
+         )
+      }
+      print jsonBuilderResponse.toPrettyString()
+   }
 }
