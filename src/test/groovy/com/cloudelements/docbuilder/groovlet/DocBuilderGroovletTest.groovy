@@ -90,15 +90,17 @@ class DocBuilderGroovletTest extends Specification {
       def root = jsonBuilder.person {
          first_name 'josh'
          last_name 'wyse'
+         is_developer true
+         age 25
       }
 
       when:
-      def response = docBuilderGroovlet.createSwaggerModels(root, "createPerson", null);
+      def response = docBuilderGroovlet.createSwaggerModels(root, "createPerson", null, null);
 
       then:
       response != null
       response instanceof List
-      response.size() == 1
+      response.size() == 2
 
       // print it out prettily to the console
       JsonBuilder jsonBuilderResponse = new JsonBuilder()

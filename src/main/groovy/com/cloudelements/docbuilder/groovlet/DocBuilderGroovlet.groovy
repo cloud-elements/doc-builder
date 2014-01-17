@@ -21,8 +21,11 @@ import static groovyx.net.http.ContentType.JSON
 List<SwaggerMethod> swaggerMethods
 List<SwaggerModel> swaggerModels
 
-def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel) {
-   def swaggerModels = []
+def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel, List<SwaggerModel> swaggerModels) {
+
+   if (swaggerModels == null) {
+      swaggerModels = new ArrayList<>();
+   }
 
    // If it's a hash map then we need to start creating a new model
    json.each {
@@ -34,7 +37,7 @@ def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel)
 
          if (mapValue instanceof Map) {
             swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: mapKey + 'Object', description: 'TODO'))
-            createSwaggerModels(mapValue, mapKey + 'Object', null)
+            createSwaggerModels(mapValue, mapKey + 'Object', null, swaggerModels)
          }
          else if (mapValue instanceof List) {
             // TODO
@@ -141,13 +144,13 @@ String requestUrl = request.uri.toString()
 
 // Create the request methods and models
 swaggerMethods = createSwaggerMethod(requestUrl, requestParams, requestMethod)
-swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl + "RequestObject"), null)
+swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl + "RequestObject"), null, null)
 
 // Send the request to the elements code
 Map responseBody = sendToElements(requestHeaders, requestMethod, requestBody)
 
 // Create the response models
-swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl + "ResponseObject")), null)
+swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl + "ResponseObject")), null, null)
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)

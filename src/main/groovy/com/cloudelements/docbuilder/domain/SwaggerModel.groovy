@@ -11,7 +11,7 @@ import groovy.transform.ToString
 @ToString
 class SwaggerModel {
    String id;
-   List<String> required = new ArrayList<>()
+   List<String> required
    Map<String, SwaggerModelProperty> properties;
 
    def addProperty(String key, SwaggerModelProperty value) {
