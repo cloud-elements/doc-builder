@@ -23,6 +23,11 @@ List<SwaggerModel> swaggerModels
 
 def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel, List<SwaggerModel> swaggerModels) {
 
+   // if there's no JSON, then we have no model to make
+   if (json == null) {
+      return new ArrayList<SwaggerModel>();
+   }
+
    if (swaggerModels == null) {
       swaggerModels = new ArrayList<>();
    }
@@ -36,15 +41,16 @@ def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel,
          }
 
          if (mapValue instanceof Map) {
-            swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: mapKey + 'Object', description: 'TODO'))
+            swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: mapKey + 'Object'))
             createSwaggerModels(mapValue, mapKey + 'Object', null, swaggerModels)
          }
          else if (mapValue instanceof List) {
             // TODO
-            swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: 'array', description: 'TODO'))
+            swaggerModel.addProperty(mapKey, new SwaggerModelArrayProperty(type: 'array'))
          }
          else {
-            swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: parseType(mapValue), description: 'TODO'))
+            swaggerModel.addProperty(mapKey, new SwaggerModelDescriptionProperty(type: parseType(mapValue),
+                  description: 'TODO'))
          }
    }
 
@@ -52,6 +58,11 @@ def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel,
 }
 
 def parseType(def clazz) {
+
+   if (clazz == null) {
+      return "string" // not sure if this is a good idea
+   }
+
    // might be a better way to do this (what i'm doing here is: retrieve 'boolean' from java.lang.Boolean, etc.)
    String className = clazz.class.name;
    String type = className.substring(className.lastIndexOf('.') + 1).toLowerCase()
@@ -148,13 +159,13 @@ String requestUrl = request.uri.toString()
 
 // Create the request methods and models
 swaggerMethods = createSwaggerMethod(requestUrl, requestParams, requestMethod)
-swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl + "RequestObject"), null, null)
+swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl) + "RequestObject", null, null)
 
 // Send the request to the elements code
 Map responseBody = sendToElements(requestHeaders, requestMethod, requestBody)
 
 // Create the response models
-swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl + "ResponseObject"), null, null))
+swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl) + "ResponseObject", null, null))
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)

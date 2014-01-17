@@ -9,6 +9,6 @@ import groovy.transform.ToString
  * @author jjwyse
  */
 @ToString
-class SwaggerModelProperty {
-   String type
+class SwaggerModelDescriptionProperty extends SwaggerModelProperty {
+   String description;
 }
