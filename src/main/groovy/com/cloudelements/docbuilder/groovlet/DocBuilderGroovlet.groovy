@@ -21,38 +21,39 @@ import static groovyx.net.http.ContentType.JSON
 List<SwaggerMethod> swaggerMethods
 List<SwaggerModel> swaggerModels
 
-def private createSwaggerModel(String modelId, def value) {
-   Map<String, Map<String, SwaggerModelProperty>> swaggerProperties
-   SwaggerModel swaggerModel = new SwaggerModel(id: modelId, properties: swaggerProperties)
-
-   // might be a better way to do this (what i'm doing here is: retrieve 'boolean' from java.lang
-   // .Boolean, etc.)
-   String className = value.class.name;
-   String type = className.substring(className.lastIndexOf('.') + 1).toLowerCase()
-
-   return swaggerModel
-}
-
-def createSwaggerModels(HashMap json, String modelId) {
+def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel) {
    def swaggerModels = []
 
    // If it's a hash map then we need to start creating a new model
    json.each {
       mapKey, mapValue ->
-         SwaggerModel swaggerModel
-         if (mapValue instanceof HashMap) {
-            createSwaggerModels(mapValue, mapKey + "Object")
+         if (swaggerModel == null) {
+            swaggerModel = new SwaggerModel(id: modelId)
+            swaggerModels << swaggerModel
+         }
+
+         if (mapValue instanceof Map) {
+            swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: mapKey + 'Object', description: 'TODO'))
+            createSwaggerModels(mapValue, mapKey + 'Object', null)
          }
          else if (mapValue instanceof List) {
             // TODO
          }
          else {
-            swaggerModel = createSwaggerModel(mapKey, modelId);
+            // TODO - create new property for the given model
+            swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: parseType(mapValue), description: 'TODO'))
          }
-         swaggerModels << swaggerModel
    }
 
    return swaggerModels
+}
+
+def parseType(def clazz) {
+   // might be a better way to do this (what i'm doing here is: retrieve 'boolean' from java.lang.Boolean, etc.)
+   String className = clazz.class.name;
+   String type = className.substring(className.lastIndexOf('.') + 1).toLowerCase()
+
+   return type
 }
 
 def private parseApiMethodName(String url) {
@@ -109,13 +110,13 @@ def getRequestBody() {
    return json
 }
 
-def sendToElements(Map headers, String requestMethod, Map jsonBody) {
+def sendToElements(Map headers, String method, Map jsonBody) {
    def httpBuilder = new HTTPBuilder('http://localhost:8080/' + request.uri.toString())
 
    httpBuilder.setHeaders(headers)
    httpBuilder.getHeaders().putAt('Content-Length', null) // cannot set this or an exception is thrown
 
-   httpBuilder.request(Method.valueOf(requestMethod), JSON) {
+   httpBuilder.request(Method.valueOf(method), JSON) {
       if (jsonBody != null) {
          body = jsonBody
       }
@@ -140,13 +141,13 @@ String requestUrl = request.uri.toString()
 
 // Create the request methods and models
 swaggerMethods = createSwaggerMethod(requestUrl, requestParams, requestMethod)
-swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl + "RequestObject"))
+swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl + "RequestObject"), null)
 
 // Send the request to the elements code
 Map responseBody = sendToElements(requestHeaders, requestMethod, requestBody)
 
 // Create the response models
-swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl + "ResponseObject")))
+swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl + "ResponseObject")), null)
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
