@@ -63,15 +63,15 @@ def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel,
 def parseType(def clazz) {
 
    if (clazz == null) {
-      return "string" // not sure if this is a good idea
+      return 'TODO' // this means we got something like {'name': null}-we don't know what data type the 'name' field is?
    }
 
    // might be a better way to do this (what i'm doing here is: retrieve 'boolean' from java.lang.Boolean, etc.)
    String className = clazz.class.name;
    String type = className.substring(className.lastIndexOf('.') + 1).toLowerCase()
 
-   if (type.equalsIgnoreCase("bigdecimal")) {
-      type = "double"
+   if (type.equalsIgnoreCase('bigdecimal')) {
+      type = 'double'
    }
 
    return type
@@ -173,6 +173,8 @@ swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(reques
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
 json {
+   publish true
+   description 'TODO'
    methods(
          swaggerMethods.each({
             swaggerMethod ->
