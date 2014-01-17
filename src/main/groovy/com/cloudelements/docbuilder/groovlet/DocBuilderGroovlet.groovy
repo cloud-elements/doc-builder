@@ -17,6 +17,7 @@ import static groovyx.net.http.ContentType.JSON
  * @author: jjwyse
  * @since: 11/24/13
  */
+
 List<SwaggerMethod> swaggerMethods
 List<SwaggerModel> swaggerModels
 
@@ -31,7 +32,6 @@ def private createSwaggerModel(String modelId, def value) {
 
    return swaggerModel
 }
-
 
 def createSwaggerModels(HashMap json, String modelId) {
    def swaggerModels = []
@@ -55,13 +55,6 @@ def createSwaggerModels(HashMap json, String modelId) {
    return swaggerModels
 }
 
-/**
- * Parse out the last part of the URL (i.e. - /elements/getElement?id=1 should return getElement or
- * /elements/getElement should return getElement)
- *
- * @param url The URL to parse
- * @return The API that is being invoked
- */
 def private parseApiMethodName(String url) {
    int endIndex = url.length()
    if (url.indexOf('?') >= 0) {
@@ -70,13 +63,6 @@ def private parseApiMethodName(String url) {
    url.substring(url.lastIndexOf('/') + 1, endIndex)
 }
 
-/**
- * Handles creating the parameters list for a given HTTP request
- *
- * @param url The full URL with the potential HTTP query parameters on the end
- * @param json The potential JSON payload on the HTTP request
- * @return The list of parameters that are a part of the 'method' JSON
- */
 def createMethodParameters(String modelName, HashMap queryParams, String httpMethod) {
    def swaggerMethodParameters = []
 
@@ -101,7 +87,7 @@ def createMethodParameters(String modelName, HashMap queryParams, String httpMet
    return swaggerMethodParameters
 }
 
-def createSwaggerMethod(String url, HashMap params, String httpMethod) {
+def createSwaggerMethod(String url, Map params, String httpMethod) {
    def swaggerMethods = []
    swaggerMethods << new SwaggerMethod(
          methodName: parseApiMethodName(url),
@@ -110,7 +96,7 @@ def createSwaggerMethod(String url, HashMap params, String httpMethod) {
          parameters: createMethodParameters(parseApiMethodName(url) + "RequestObject", params, httpMethod))
 }
 
-def getJson() {
+def getRequestBody() {
    HashMap json = null
 
    try {
@@ -123,31 +109,44 @@ def getJson() {
    return json
 }
 
-// Create the request methods and models
-swaggerMethods = createSwaggerMethod(request.uri.toString(), params, request.method)
-swaggerModels = createSwaggerModels(getJson(), parseApiMethodName(request.uri.toString()) + "RequestObject")
+def sendToElements(Map headers, String requestMethod, Map jsonBody) {
+   def httpBuilder = new HTTPBuilder('http://localhost:8080/' + request.uri.toString())
 
-// Send the request to the elements code and create the response model
-def http = new HTTPBuilder('http://localhost:8080/' + request.uri.toString())
-Map elementsHeader = http.getHeaders()
-elementsHeader.putAt("Authorization", headers.get("Authorization"))
-http.setHeaders(elementsHeader)
-http.request(Method.valueOf(request.method), JSON) {
+   httpBuilder.setHeaders(headers)
+   httpBuilder.getHeaders().putAt('Content-Length', null) // cannot set this or an exception is thrown
 
-   response.success = { resp, json ->
-      assert resp.status == 200
-      swaggerModels.addAll createSwaggerModels(json, parseApiMethodName(uri.toString()) + "ResponseObject")
-   }
+   httpBuilder.request(Method.valueOf(requestMethod), JSON) {
+      if (jsonBody != null) {
+         body = jsonBody
+      }
 
-   response.failure = { resp ->
-      println 'Failure'
-      println 'Response Status: ' + resp.statusLine.statusCode
-   }
+      response.success = { resp, json ->
+         assert resp.status == 200
+         return json
+      }
 
-   response.'404' = { resp ->
-      println '404 - Is Elements running?'
+      response.failure = { resp ->
+         println 'Error while talking to Elements - ' + resp.statusLine.statusCode
+      }
    }
 }
+
+// Variables from the incoming HTTP request
+Map requestParams = params
+Map requestBody = getRequestBody()
+Map requestHeaders = headers
+String requestMethod = request.method
+String requestUrl = request.uri.toString()
+
+// Create the request methods and models
+swaggerMethods = createSwaggerMethod(requestUrl, requestParams, requestMethod)
+swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl + "RequestObject"))
+
+// Send the request to the elements code
+Map responseBody = sendToElements(requestHeaders, requestMethod, requestBody)
+
+// Create the response models
+swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl + "ResponseObject")))
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
