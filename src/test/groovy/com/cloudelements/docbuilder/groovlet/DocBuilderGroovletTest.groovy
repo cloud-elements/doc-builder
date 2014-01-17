@@ -1,7 +1,6 @@
 package com.cloudelements.docbuilder.groovlet
 
 import com.cloudelements.docbuilder.domain.SwaggerMethod
-import com.cloudelements.docbuilder.domain.SwaggerModel
 import groovy.json.JsonBuilder
 import spock.lang.Specification
 
@@ -92,6 +91,8 @@ class DocBuilderGroovletTest extends Specification {
          last_name 'wyse'
          is_developer true
          age 25
+         hobbies 'running', 'developing', 'reading'
+         height 71.5
       }
 
       when:

@@ -41,9 +41,9 @@ def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel,
          }
          else if (mapValue instanceof List) {
             // TODO
+            swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: 'array', description: 'TODO'))
          }
          else {
-            // TODO - create new property for the given model
             swaggerModel.addProperty(mapKey, new SwaggerModelProperty(type: parseType(mapValue), description: 'TODO'))
          }
    }
@@ -55,6 +55,10 @@ def parseType(def clazz) {
    // might be a better way to do this (what i'm doing here is: retrieve 'boolean' from java.lang.Boolean, etc.)
    String className = clazz.class.name;
    String type = className.substring(className.lastIndexOf('.') + 1).toLowerCase()
+
+   if (type.equalsIgnoreCase("bigdecimal")) {
+      type = "double"
+   }
 
    return type
 }
