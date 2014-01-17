@@ -154,7 +154,7 @@ swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl +
 Map responseBody = sendToElements(requestHeaders, requestMethod, requestBody)
 
 // Create the response models
-swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl + "ResponseObject")), null, null)
+swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl + "ResponseObject"), null, null))
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
