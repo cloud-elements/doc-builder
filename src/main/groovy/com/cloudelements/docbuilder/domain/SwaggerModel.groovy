@@ -2,17 +2,10 @@ package com.cloudelements.docbuilder.domain
 
 import groovy.transform.ToString
 
-/**
- * TODO - JJW
- *
- * @version %I%, %G%
- * @author jjwyse
- */
 @ToString
 class SwaggerModel {
-   String id;
-   List<String> required
-   Map<String, SwaggerModelProperty> properties;
+   String id
+   Map<String, SwaggerModelProperty> properties
 
    def addProperty(String key, SwaggerModelProperty value) {
       if (properties == null) {

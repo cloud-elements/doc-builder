@@ -95,7 +95,7 @@ class DocBuilderGroovletTest extends Specification {
       }
 
       when:
-      def response = docBuilderGroovlet.createSwaggerModels(root, "createPerson", null, null);
+      def response = docBuilderGroovlet.createSwaggerModels(root, "createPerson", true, null, null);
 
       then:
       response != null
@@ -134,7 +134,7 @@ class DocBuilderGroovletTest extends Specification {
       print root
 
       when:
-      def response = docBuilderGroovlet.createSwaggerModels(root, "createPersonWithHobbies", null, null);
+      def response = docBuilderGroovlet.createSwaggerModels(root, "createPersonWithHobbies", true, null, null);
 
       then:
       response != null

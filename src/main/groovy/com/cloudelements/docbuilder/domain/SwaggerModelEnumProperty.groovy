@@ -1,11 +1,8 @@
 package com.cloudelements.docbuilder.domain
 
-/**
- * TODO - JJW
- *
- * @version %I%, %G%
- * @author jjwyse
- */
+import groovy.transform.ToString
+
+@ToString
 class SwaggerModelEnumProperty extends SwaggerModelProperty {
    List<String> enums;
 }
