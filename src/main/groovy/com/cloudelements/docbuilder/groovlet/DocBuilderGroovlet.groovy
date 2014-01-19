@@ -53,7 +53,7 @@ def createSwaggerModels(HashMap json, String modelId, SwaggerModel swaggerModel,
          }
          else {
             swaggerModel.addProperty(mapKey, new SwaggerModelDescriptionProperty(type: parseType(mapValue),
-                  description: 'TODO'))
+                  description: "TODO [$mapValue]"))
          }
    }
 
@@ -90,7 +90,7 @@ def createMethodParameters(String modelName, HashMap queryParams, String httpMet
 
    queryParams.each { key, value ->
       SwaggerMethodQueryParameter queryParameter = new SwaggerMethodQueryParameter(
-            description: "TODO ($value)",
+            description: "TODO [$value]",
             parameterName: "$key",
             parameterType: "query") // any parameters we're adding here must be query parameters, not body
 
@@ -113,9 +113,9 @@ def createSwaggerMethod(String url, Map params, String httpMethod) {
    def swaggerMethods = []
    swaggerMethods << new SwaggerMethod(
          methodName: parseApiMethodName(url),
-         description: "TODO",
-         model: parseApiMethodName(url) + "ResponseObject",
-         parameters: createMethodParameters(parseApiMethodName(url) + "RequestObject", params, httpMethod))
+         description: 'TODO',
+         model: parseApiMethodName(url) + 'ResponseObject',
+         parameters: createMethodParameters(parseApiMethodName(url) + 'RequestObject', params, httpMethod))
 }
 
 def getRequestBody() {
@@ -132,7 +132,7 @@ def getRequestBody() {
 }
 
 def sendToElements(Map headers, String method, Map jsonBody) {
-   def httpBuilder = new HTTPBuilder('http://localhost:8080/' + request.uri.toString())
+   def httpBuilder = new HTTPBuilder('https://snapshot.cloud-elements.com' + request.uri.toString())
 
    httpBuilder.setHeaders(headers)
    httpBuilder.getHeaders().putAt('Content-Length', null) // cannot set this or an exception is thrown
@@ -162,13 +162,13 @@ String requestUrl = request.uri.toString()
 
 // Create the request methods and models
 swaggerMethods = createSwaggerMethod(requestUrl, requestParams, requestMethod)
-swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl) + "RequestObject", null, null)
+swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl) + 'RequestObject', null, null)
 
 // Send the request to the elements code
 Map responseBody = sendToElements(requestHeaders, requestMethod, requestBody)
 
 // Create the response models
-swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl) + "ResponseObject", null, null))
+swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl) + 'ResponseObject', null, null))
 
 // Construct JSON which represents the Swagger Documentation
 response.setStatus(200)
