@@ -6,9 +6,11 @@ Self-documents RESTful services by analyzing the request and response JSON paylo
 #setup
 =========
 1. Clone this repository
+
 ```
 git clone https://github.com/cloud-elements/doc-builder.git
 ```
+
 2. If you don't have GVM installed, do that first <a href="http://gvmtool.net/" target="_blank">here</a>
 3. Once gvm is installed, install groovy and gradle
    * gvm install gradle
