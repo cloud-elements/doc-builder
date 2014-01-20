@@ -3,7 +3,7 @@
 =========
 Self-documents RESTful services by analyzing the request and response JSON payloads and generating the Swagger JSON documentation.
 
-#Setup
+#setup
 =========
 1. Clone this repository
 ```
@@ -16,7 +16,7 @@ git clone https://github.com/cloud-elements/doc-builder.git
 4. Use gradle to build and run the web application
    * gradle clean jettyRunWar
 
-#Instructions
+#instructions
 =========
 1. By default, this application runs on port 9111.  To change this port, modify the build.gradle file
 2. Run the web application:
