@@ -137,8 +137,8 @@ def getRequestBody() {
    return json
 }
 
-def sendToElements(Map headers, String method, Map jsonBody) {
-   def httpBuilder = new HTTPBuilder('https://snapshot.cloud-elements.com' + request.uri.toString())
+def sendToElements(Map headers, String method, Map jsonBody, String httpProtocol, String elementsEndpoint) {
+   def httpBuilder = new HTTPBuilder("$httpProtocol$elementsEndpoint" + request.uri.toString())
 
    httpBuilder.setHeaders(headers)
    httpBuilder.getHeaders().putAt('Content-Length', null) // cannot set this or an exception is thrown
@@ -165,13 +165,22 @@ Map requestBody = getRequestBody()
 Map requestHeaders = headers
 String requestMethod = request.method
 String requestUrl = request.uri.toString()
+String elementsEndpoint = 'localhost:8080'
+String httpProtocol = 'http://'
+if (requestParams['elementsEndpoint'] != null) {
+   elementsEndpoint = requestParams['elementsEndpoint']
+   if (!elementsEndpoint.contains('localhost')) {
+      httpProtocol = 'https://' // all environments but localhost are https
+   }
+}
+System.out << "Setting elements endpoint to: $httpProtocol$elementsEndpoint"
 
 // Create the request methods and models
 swaggerMethods = createSwaggerMethod(requestUrl, requestParams, requestMethod)
 swaggerModels = createSwaggerModels(requestBody, parseApiMethodName(requestUrl) + 'RequestObject', true, null, null)
 
 // Send the request to the elements code
-Map responseBody = sendToElements(requestHeaders, requestMethod, requestBody)
+Map responseBody = sendToElements(requestHeaders, requestMethod, requestBody, httpProtocol, elementsEndpoint)
 
 // Create the response models
 swaggerModels.addAll(createSwaggerModels(responseBody, parseApiMethodName(requestUrl) + 'ResponseObject', false,
