@@ -21,7 +21,6 @@ git clone https://github.com/cloud-elements/doc-builder.git
 =========
 1. By default, this application runs on port 9111.  To change this port, modify the build.gradle file
 2. Run the web application:
-
 ```
 cd [doc-builder root]
 ```
@@ -31,7 +30,6 @@ gradle jettyRunWar
 ```
 
 3. Whatever you use to send HTTP requests to soba (POSTMAN, cURL, etc.) - send the exact same HTTP request at the doc-builder web application
-
 4. The HTTP response you receive will be the JSON 'methods' and 'models' you need to add to the Swagger JSON document
 * Example response:
 
