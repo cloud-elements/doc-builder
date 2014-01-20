@@ -35,8 +35,19 @@ cd [doc-builder root]
 gradle jettyRunWar
 ```
 
-3. Whatever you use to send HTTP requests to soba (POSTMAN, cURL, etc.) - send the exact same HTTP request at the doc-builder web application
-4. The HTTP response you receive will be the JSON 'methods' and 'models' you need to add to the Swagger JSON document.  Make sure you replace any 'TODO' fields manually. Example response:
+3. Whatever you use to send HTTP requests to our elements application (POSTMAN, cURL, etc.) - send the exact same HTTP request at the doc-builder web application
+4. By default, doc-builder sets its 'elementsEndpoint' to be localhost:8080.  To change this endpoint, specify an 'elementsEndpoint' query parameter in your request.
+   * This will forward the retrieveObject request to localhost:8080 since no 'elementsEndpoint' parameter is specified
+```
+http://localhost:9111/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO
+```
+
+   * This will forward the retrieveObject to snapshot.cloud-elements.com
+```
+http://localhost:9111/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO&elementsEndpoint=snapshot.cloud-elements.com
+```
+
+5. The HTTP response you receive will be the JSON 'methods' and 'models' you need to add to the Swagger JSON document.  Make sure you replace any 'TODO' fields manually. Example response:
 
 ```JSON
 {
