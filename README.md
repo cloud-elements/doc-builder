@@ -12,8 +12,13 @@ git clone https://github.com/cloud-elements/doc-builder.git
 
 2. If you don't have GVM installed, do that first <a href="http://gvmtool.net/" target="_blank">here</a>
 3. Once gvm is installed, install groovy and gradle
-   * gvm install gradle
-   * gvm install groovy
+```
+gvm install gradle
+```
+```
+gvm install groovy
+```
+
 4. Use gradle to build and run the web application
    * gradle clean jettyRunWar
 
