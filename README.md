@@ -6,7 +6,6 @@ Self-documents RESTful services by analyzing the request and response JSON paylo
 #setup
 =========
 1. Clone this repository
-
 ```
 git clone https://github.com/cloud-elements/doc-builder.git
 ```
