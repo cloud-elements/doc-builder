@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/cloud-elements/doc-builder.png?branch=master)](https://travis-ci.org/cloud-elements/doc-builder)
 #doc-builder
 =========
-Self-documents RESTful services by analyzing the request and response JSON payloads and generating the Swagger JSON documentation.
+Generates Swagger documentation for a RESTful service by analyzing the HTTP request and response
 
 #setup
 =========
