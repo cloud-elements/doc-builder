@@ -15,10 +15,7 @@ Self-documents RESTful services by analyzing the request and response JSON paylo
 #Instructions
 =========
 1. By default, this application runs on port 9111.  To change this port, modify the build.gradle file
-2. Run the web application
-```
-cd [doc-builder-root]
-```
+2. Run the web application:  
 ```
 gradle jettyRunWar
 ```
