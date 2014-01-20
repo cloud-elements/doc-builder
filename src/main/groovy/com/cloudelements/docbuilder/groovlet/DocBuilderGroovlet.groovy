@@ -95,6 +95,10 @@ def createMethodParameters(String modelName, HashMap queryParams, String httpMet
    def swaggerMethodParameters = []
 
    queryParams.each { key, value ->
+      if (key.equals('elementsEndpoint')) {
+         return // simulates a 'continue' in this closure since we want to ignore the 'elementsEndpoint'
+      }
+      
       SwaggerMethodQueryParameter queryParameter = new SwaggerMethodQueryParameter(
             description: "TODO [$value]",
             parameterName: "$key",
