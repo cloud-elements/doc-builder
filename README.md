@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/cloud-elements/doc-builder.png?branch=master)](https://travis-ci.org/cloud-elements/doc-builder)
 #doc-builder
 =========
-Generates Swagger documentation for a RESTful service by analyzing the HTTP request and response
+Generates Swagger documentation for a RESTful service by analyzing the HTTP request and response.
 
 #setup
 =========
@@ -26,8 +26,8 @@ gradle clean jettyRunWar
 
 #instructions
 =========
-1. By default, this application runs on port 9111.  To change this port, modify the build.gradle file
-2. Run the web application:
+1. By default, doc-builder runs on port 9111.  To change this port, modify the build.gradle file
+2. Run doc-builder:
 ```
 cd [doc-builder root]
 ```
@@ -46,7 +46,6 @@ gradle jettyRunWar
 ```
 http://localhost:9111/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO
 ```
-
    * This will forward the retrieveObject to snapshot.cloud-elements.com
 ```
 http://localhost:9111/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO&elementsEndpoint=snapshot.cloud-elements.com
