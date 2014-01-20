@@ -36,7 +36,8 @@ gradle jettyRunWar
 ```
 
 3. Whatever you use to send HTTP requests to soba (POSTMAN, cURL, etc.) - send the exact same HTTP request at the doc-builder web application
-4. The HTTP response you receive will be the JSON 'methods' and 'models' you need to add to the Swagger JSON document.  Make sure you replace any 'TODO' manually. Example response:
+4. The HTTP response you receive will be the JSON 'methods' and 'models' you need to add to the Swagger JSON document.  Make sure you replace any 'TODO' fields manually. Example response:
+
 ```JSON
 {
        "methods": [
