@@ -12,15 +12,15 @@ Self-documents RESTful services by analyzing the request and response JSON paylo
 3. Use gradle to build and run the web application
    * gradle clean jettyRunWar 
 
-![alt tag](http://stack.to/wp-content/uploads//Cloud-Elements.png)
-
 #Instructions
 =========
 1. Run the web application locally
-   * '''
+   '''
    cd [doc-builder-root]
    gradle jettyRunWar
    '''
-   * By default, this application runs on port 9111.  To change this port, modify the build.gradle file
+2. By default, this application runs on port 9111.  To change this port, modify the build.gradle file
 
-2. Whatever you use to send HTTP requests to soba (POSTMAN, cURL, etc.) - send the exact same HTTP request at the doc-builder web application
+3. Whatever you use to send HTTP requests to soba (POSTMAN, cURL, etc.) - send the exact same HTTP request at the doc-builder web application
+
+![alt tag](http://stack.to/wp-content/uploads//Cloud-Elements.png)
