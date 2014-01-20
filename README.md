@@ -52,7 +52,7 @@ http://localhost:9111/crm/retrieveObject?objectName=residence&id=a1v30000000LKYw
 http://localhost:9111/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO&elementsEndpoint=snapshot.cloud-elements.com
 ```
 
-5. The HTTP response you receive will be the JSON 'methods' and 'models' you need to add to the Swagger JSON document.  Make sure you replace any 'TODO' fields manually. Example response:
+\5. The HTTP response you receive will be the JSON 'methods' and 'models' you need to add to the Swagger JSON document.  Make sure you replace any 'TODO' fields manually. Example response:
 
 ```JSON
 {
