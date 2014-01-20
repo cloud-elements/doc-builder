@@ -20,7 +20,9 @@ gvm install groovy
 ```
 
 4. Use gradle to build and run the web application
-   * gradle clean jettyRunWar
+```
+gradle clean jettyRunWar
+```
 
 #instructions
 =========
