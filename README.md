@@ -14,13 +14,53 @@ Self-documents RESTful services by analyzing the request and response JSON paylo
 
 #Instructions
 =========
-1. Run the web application locally
-   '''
+1. By default, this application runs on port 9111.  To change this port, modify the build.gradle file
+2. Run the web application
+   ```
    cd [doc-builder-root]
    gradle jettyRunWar
-   '''
-2. By default, this application runs on port 9111.  To change this port, modify the build.gradle file
-
+   ```
 3. Whatever you use to send HTTP requests to soba (POSTMAN, cURL, etc.) - send the exact same HTTP request at the doc-builder web application
-
+4. The HTTP response you receive will be the JSON 'methods' and 'models' you need to add to the Swagger JSON document
+   * Example response:
+   ```
+       "methods": [
+           {
+               "parameters": [
+                   {
+                       "parameterName": "id",
+                       "parameterType": "query",
+                       "description": "TODO [a1v30000000LKYwAAO]"
+                   },
+                   {
+                       "parameterName": "objectName",
+                       "parameterType": "query",
+                       "description": "TODO [residence]"
+                   }
+               ],
+               "description": "TODO",
+               "model": "retrieveObjectResponseObject",
+               "methodName": "retrieveObject"
+           }
+       ],
+       "models": [
+           {
+               "properties": {
+                   "dataReturned": {
+                       "type": "boolean",
+                       "description": "TODO [true]"
+                   },
+                   "object": {
+                       "type": "objectObject"
+                   },
+                   "success": {
+                       "type": "boolean",
+                       "description": "TODO [true]"
+                   }
+               },
+               "id": "retrieveObjectResponseObject"
+           },
+           ...
+   ```
+5. Any fields with TODO will need to be updated manually
 ![alt tag](http://stack.to/wp-content/uploads//Cloud-Elements.png)
