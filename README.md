@@ -37,6 +37,11 @@ gradle jettyRunWar
 
 3. Whatever you use to send HTTP requests to our elements application (POSTMAN, cURL, etc.) - send the exact same HTTP request at the doc-builder web application
 4. By default, doc-builder sets its 'elementsEndpoint' to be localhost:8080.  To change this endpoint, specify an 'elementsEndpoint' query parameter in your request.
+   * Valid 'elementsEndpoint' parameter values:
+      * localhost:[PORT]
+      * snapshot.cloud-elements.com
+      * qa.cloud-elements.com
+      * console.cloud-elements.com
    * This will forward the retrieveObject request to localhost:8080 since no 'elementsEndpoint' parameter is specified
 ```
 http://localhost:9111/crm/retrieveObject?objectName=residence&id=a1v30000000LKYwAAO
