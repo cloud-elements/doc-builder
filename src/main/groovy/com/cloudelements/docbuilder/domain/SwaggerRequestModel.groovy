@@ -4,5 +4,5 @@ import groovy.transform.ToString
 
 @ToString
 class SwaggerRequestModel extends SwaggerModel {
-   List<String> required
+   List<String> required = ['TODO']
 }
