@@ -13,7 +13,6 @@ import static groovyx.net.http.ContentType.JSON
  *
  * [Good documentation on Groovlets here: http://groovy.codehaus.org/Groovlets]
  *
- * @version $Revision: 1 $
  * @author: jjwyse
  * @since: 11/24/13
  */
