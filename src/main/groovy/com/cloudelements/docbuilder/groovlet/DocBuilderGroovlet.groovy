@@ -54,6 +54,9 @@ def createSwaggerModels(HashMap json, String modelId, boolean isRequest, Swagger
             items.put('$ref', mapKey + "Object")
 
             swaggerModel.addProperty(mapKey, new SwaggerModelArrayProperty(type: 'array', items: items))
+            if( mapValue.isEmpty() ) {
+               return
+            }
             createSwaggerModels(mapValue.get(0), mapKey + 'Object', isRequest, null, swaggerModels)
          }
          else {
